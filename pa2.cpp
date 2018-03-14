@@ -8,11 +8,45 @@ LinkedList::LinkedList(){
     size = 0;
 }
 
-void LinkedList::addNode() {
+void LinkedList::addNode(string _state) {
+    node *state = new node;
+    state -> data = _state;
+    state -> next = NULL;
 
+    if (head == NULL) {
+        head = state;
+        tail = state;
+    }
+
+    else {
+        tail -> next = state;
+        tail = tail -> next;
+    }
+
+    size++;
+}
+
+void LinkedList::printList(){
+    string tempString;
+    node *tempNode = head;
+
+    for (int i = 0; i < size; i++) {
+        tempString += tempNode -> data + " ";
+        tempNode = tempNode -> next;
+    }
+
+    cout << tempString;
 }
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    LinkedList list;
+    list.addNode("free");
+    list.addNode("free");
+    list.addNode("P1");
+    list.addNode("P1");
+    list.addNode("P2");
+    list.addNode("free");
+    list.printList();
+
     return 0;
 }

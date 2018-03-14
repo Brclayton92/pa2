@@ -5,8 +5,11 @@
 #ifndef PA2_PA2_H
 #define PA2_PA2_H
 
+using namespace std;
+#include <string>
+
 struct node {
-    int data;
+    string data;
     node *next;
 };
 
@@ -18,7 +21,8 @@ class LinkedList {
 
     public:
         LinkedList();
-        void addNode();
+        void addNode(string _state);
+        void printList();
 };
 
 #endif //PA2_PA2_H
