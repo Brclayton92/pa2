@@ -58,7 +58,6 @@ void LinkedList::bestFit(string progName, int sizeReq) {
     node *posStart = head;
     int smallestFit = size;
     int length = 0;
-    bool wasInside = false;
 
     //iterates through linked list
     for (int i = 0; i < size; i++){
@@ -114,6 +113,18 @@ void LinkedList::bestFit(string progName, int sizeReq) {
     }
 }
 
+void LinkedList::killProgram(string progName) {
+    node *temp = head;
+
+    for (int i = 0; i < size; i++) {
+        if (temp->data == progName){
+            temp->data = "Free";
+        }
+
+        temp = temp->next;
+    }
+}
+
 /*
  * LinkedList class methods end
  */
@@ -130,6 +141,25 @@ int main() {
     cout << endl << endl;
     list.bestFit("P3", 18);
     list.printList();
+    cout << endl << endl;
+    list.bestFit("P4", 21);
+    list.printList();
+    cout << endl << endl;
+    list.bestFit("P5", 28);
+    list.printList();
+    cout << endl << endl;
+    list.killProgram("P2");
+    list.printList();
+    cout << endl << endl;
+    list.killProgram("P4");
+    list.printList();
+    cout << endl << endl;
+    list.bestFit("p6", 8);
+    list.printList();
+    cout << endl << endl;
+    list.bestFit("P8", 16);
+    list.printList();
+    cout << endl << endl;
 
     return 0;
 }
