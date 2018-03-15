@@ -6,7 +6,7 @@
 #define PA2_PA2_H
 
 using namespace std;
-#include <string>
+#include "string"
 
 struct node {
     string data;
@@ -18,11 +18,13 @@ class LinkedList {
         node *head;
         node *tail;
         int size;
+        int initialSize;
 
     public:
         LinkedList();
         void addNode(string _state);
         void printList();
+        void bestFit(string progName, int sizeReq);
 };
 
 #endif //PA2_PA2_H
