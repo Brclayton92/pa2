@@ -26,6 +26,7 @@ class LinkedList {
         void printList();
         void bestFit(string progName, int sizeReq);
         void killProgram(string progName);
+        void fragmentCheck();
 };
 
 #endif //PA2_PA2_H

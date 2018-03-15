@@ -111,18 +111,51 @@ void LinkedList::bestFit(string progName, int sizeReq) {
         start->data = progName;
         start = start->next;
     }
+
+    cout << "Program " << progName << " added successfully: " << sizeReq << " page(s) used.";
 }
 
 void LinkedList::killProgram(string progName) {
     node *temp = head;
+    int memoryReclaimed = 0;
 
     for (int i = 0; i < size; i++) {
         if (temp->data == progName){
             temp->data = "Free";
+            memoryReclaimed++;
         }
 
         temp = temp->next;
     }
+
+    cout << "Program " << progName << " successfully killed, " << memoryReclaimed << " page(s) reclaimed.";
+}
+
+void LinkedList::fragmentCheck() {
+    node *temp = head;
+    int numFragments = 0;
+    bool newFragment = false;
+
+    if (temp->data != "Free"){
+        numFragments++;
+    }
+
+    for (int i = 0; i < size; i++){
+        if (temp->data == "Free"){
+            newFragment = true;
+        }
+
+        if (temp->data != "Free"){
+            if (newFragment){
+                numFragments++;
+                newFragment = false;
+            }
+        }
+
+        temp = temp->next;
+    }
+
+    cout << "There is(are) " << numFragments << " fragment(s)" << endl;
 }
 
 /*
@@ -130,36 +163,115 @@ void LinkedList::killProgram(string progName) {
  */
 
 int main() {
-    LinkedList list;
-    list.printList();
-    cout << endl << endl;
-    list.bestFit("P1", 13);
-    list.printList();
-    cout << endl << endl;
-    list.bestFit("P2", 9);
-    list.printList();
-    cout << endl << endl;
-    list.bestFit("P3", 18);
-    list.printList();
-    cout << endl << endl;
-    list.bestFit("P4", 21);
-    list.printList();
-    cout << endl << endl;
-    list.bestFit("P5", 28);
-    list.printList();
-    cout << endl << endl;
-    list.killProgram("P2");
-    list.printList();
-    cout << endl << endl;
-    list.killProgram("P4");
-    list.printList();
-    cout << endl << endl;
-    list.bestFit("p6", 8);
-    list.printList();
-    cout << endl << endl;
-    list.bestFit("P8", 16);
-    list.printList();
-    cout << endl << endl;
+    LinkedList memoryList;
+    int bestOrWorstSelection = 0;
+    int memorySelection = 0;
+    string programName = " ";
+    int programSize = 0;
+
+    cout << "Use best for worst fit?" << endl;
+    cout << "1. Best fit" << endl << "2. Worst fit" << endl;
+    cin >> bestOrWorstSelection;
+
+    if (bestOrWorstSelection == 1) {
+        while (memorySelection != 5) {
+            cout << endl << "Using best fit algorithm" << endl;
+            cout << endl;
+            cout << "1. Add program" << endl;
+            cout << "2. Kill program" << endl;
+            cout << "3. Fragmentation" << endl;
+            cout << "4. Print memory" << endl;
+            cout << "5. Exit" << endl;
+
+            cout << endl;
+            cout << "choice - ";
+            cin >> memorySelection;
+            cout << endl;
+
+            switch (memorySelection) {
+                case 1:
+                    cout << "Program name - ";
+                    cin >> programName;
+                    cout << endl;
+                    cout << "Program Size (KB) - ";
+                    cin >> programSize;
+                    memoryList.bestFit(programName, programSize);
+                    break;
+
+                case 2:
+                    cout << "Program name - " << endl;
+                    cin >> programName;
+                    memoryList.killProgram(programName);
+                    break;
+
+                case 3:
+                    memoryList.fragmentCheck();
+                    break;
+
+                case 4:
+                    memoryList.printList();
+                    break;
+
+                case 5:
+                    return 0;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    else if (bestOrWorstSelection == 2) {
+        while (memorySelection != 5) {
+            cout << endl << "Using worst fit algorithm" << endl;
+            cout << endl;
+            cout << "1. Add program" << endl;
+            cout << "2. Kill program" << endl;
+            cout << "3. Fragmentation" << endl;
+            cout << "4. Print memory" << endl;
+            cout << "5. Exit" << endl;
+
+            cout << endl;
+            cout << "choice - ";
+            cin >> memorySelection;
+            cout << endl;
+
+            switch (memorySelection) {
+                case 1:
+                    cout << "Program name - ";
+                    cin >> programName;
+                    cout << endl;
+                    cout << "Program Size (KB) - ";
+                    cin >> programSize;
+                    //memoryList.worstFit(programName, programSize);
+                    break;
+
+                case 2:
+                    cout << "Program name - " << endl;
+                    cin >> programName;
+                    memoryList.killProgram(programName);
+                    break;
+
+                case 3:
+                    memoryList.fragmentCheck();
+                    break;
+
+                case 4:
+                    memoryList.printList();
+                    break;
+
+                case 5:
+                    return 0;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    else {
+        //Use this for input verification
+    }
 
     return 0;
 }
