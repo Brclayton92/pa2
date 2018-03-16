@@ -54,7 +54,7 @@ void LinkedList::bestFit(string progName, int sizeReq) {
     else {
         sizeReq = (sizeReq / 4) + 1;   // converts size input by user from KB to number of nodes
     }
-    node *start = head;                // value that stores the starting position of the best fitting chunk
+    node *start = nullptr;                // value that stores the starting position of the best fitting chunk
     node *temp = head;                // temp value used to move through linked list
     node *posStart = head;            // value that temporarily holds the starting position of each chunk
     int smallestFit = size;           // used to track the smallest chunk encountered as temp moves through the linked list
@@ -106,7 +106,7 @@ void LinkedList::bestFit(string progName, int sizeReq) {
     }
 
     //checks to ensure the final chunk of space in the linked list isn't the best fit, if it is best fit, start is set to posStart
-    if(start != posStart) {
+    if(start != posStart /*|| !start*/) {
         temp = posStart;
         int counter = 0;
         while (temp) {
@@ -114,7 +114,7 @@ void LinkedList::bestFit(string progName, int sizeReq) {
             temp = temp->next;
         }
 
-        if(counter >= sizeReq && counter < smallestFit) {
+        if(counter >= sizeReq && counter <= smallestFit) {
             start = posStart;
         }
     }
@@ -123,16 +123,19 @@ void LinkedList::bestFit(string progName, int sizeReq) {
     if (start) {
         for (int i = 0; i < sizeReq; i++) {
             start->data = progName;
-            start = start->next;
+
+            if (start->next != nullptr) {
+                start = start->next;
+            }
         }
     }
 
-     //Fixme : only works if start is initialized to null, however start = null breaks the method
+     //Fixme : only works if start is initialized to null, however start = null breaks the method (might be fixed now, do some tests)
     // displays error message is program is too large for available memory
-    /*if (!start){
+    if (!start){
         cout << "Error, Not enough memory for Program " << progName << endl;
         return;
-    }*/
+    }
 
     cout << "Program " << progName << " added successfully: " << sizeReq << " page(s) used.";
 }
@@ -242,20 +245,26 @@ void LinkedList::killProgram(string progName) {
     cout << "Program " << progName << " successfully killed, " << memoryReclaimed << " page(s) reclaimed.";
 }
 
+// Method counts number of fragments
 void LinkedList::fragmentCheck() {
     node *temp = head;
     int numFragments = 0;
     bool newFragment = false;
 
+    // Checks the first node for data and increments numFragments if it contains data
     if (temp->data != "Free"){
         numFragments++;
     }
 
+    //iterates through linked list
     for (int i = 0; i < size; i++){
+
+        // if the end of a fragments is found, newFragment becomes true
         if (temp->data == "Free"){
             newFragment = true;
         }
 
+        // increments numFragments if
         if (temp->data != "Free"){
             if (newFragment){
                 numFragments++;
@@ -274,7 +283,16 @@ void LinkedList::fragmentCheck() {
  */
 
 int main(int argc, char *argv[]) {
-    string cmdLine = argv[1];
+    string cmdLine;
+
+    if (argv[1] == nullptr) {
+        cmdLine = "";
+    }
+
+    else {
+        cmdLine = argv[1];
+    }
+
     LinkedList memoryList;
     int memorySelection = 0;
     string programName = " ";
@@ -302,6 +320,12 @@ int main(int argc, char *argv[]) {
                     cout << endl;
                     cout << "Program Size (KB) - ";
                     cin >> programSize;
+
+                    if (programSize < 1) {
+                        cout << "Invalid input, program size must be greater than zero." << endl;
+                        break;
+                    }
+
                     cout << endl;
                     memoryList.bestFit(programName, programSize);
                     break;
@@ -378,7 +402,7 @@ int main(int argc, char *argv[]) {
     }
 
     else {
-        //Use this for input verification
+        cout << "Error, invalid or missing command line argument. Please enter 'best' or 'worst' in command line.";
     }
 
     return 0;
