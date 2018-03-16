@@ -16,10 +16,11 @@ LinkedList::LinkedList(){
         this->LinkedList::addNode("Free");
 }
 
+//method for adding new nodes to Linked List
 void LinkedList::addNode(string _state) {
-    node *state = new node;
-    state -> data = _state;
-    state -> next = nullptr;
+    node *state = new node;      // creates a space in memeory for new Node
+    state -> data = _state;      // assigns passed in string to data section of new node
+    state -> next = nullptr;     //
 
     if (head == nullptr) {
         head = state;
