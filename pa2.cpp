@@ -60,6 +60,18 @@ void LinkedList::bestFit(string progName, int sizeReq) {
     int smallestFit = size;           // used to track the smallest chunk encountered as temp moves through the linked list
     int length = 0;                   // used to track the length of the current chunk
 
+    // prevents entry of a program name that already exists in memory list
+    for (int i = 0; i < size; i++) {
+        if (temp->data == progName) {
+            cout << "Error, Program " << progName << " already running." << endl;
+            return;
+        }
+
+        temp = temp -> next;
+    }
+
+    temp = head;
+
     //iterates through linked list
     for (int i = 0; i < size; i++){
 
@@ -80,7 +92,6 @@ void LinkedList::bestFit(string progName, int sizeReq) {
         //if temp no longer points to a free node, checks if program will fit in current chunk, if it will, sets smallest fit to the length of current chunk
         if (temp->data != "Free") {
             if ((length >= sizeReq)){
-
                 if (length < smallestFit){
                     smallestFit = length;
                     start = posStart;
@@ -108,11 +119,20 @@ void LinkedList::bestFit(string progName, int sizeReq) {
         }
     }
 
-    //assigns the program to it's appropriate nodes in memory
-    for (int i = 0; i < sizeReq; i++) {
-        start->data = progName;
-        start = start->next;
+    //assigns the program to it's appropriate nodes in memory if start != null
+    if (start) {
+        for (int i = 0; i < sizeReq; i++) {
+            start->data = progName;
+            start = start->next;
+        }
     }
+
+     //Fixme : only works if start is initialized to null, however start = null breaks the method
+    // displays error message is program is too large for available memory
+    /*if (!start){
+        cout << "Error, Not enough memory for Program " << progName << endl;
+        return;
+    }*/
 
     cout << "Program " << progName << " added successfully: " << sizeReq << " page(s) used.";
 }
@@ -124,11 +144,23 @@ void LinkedList::worstFit(string progName, int sizeReq) {
     else {
         sizeReq = (sizeReq / 4) + 1;   // converts size input by user from KB to number of nodes
     }
-    node *start = head;                // value that stores the starting position of the worst fitting chunk
+    node *start = nullptr;                // value that stores the starting position of the worst fitting chunk
     node *temp = head;                // temp value used to move through linked list
     node *posStart = head;            // value that temporarily holds the starting position of each chunk
     int largestFit = 0;           // used to track the largest chunk encountered as temp moves through the linked list
     int length = 0;                   // used to track the length of the current chunk
+
+
+    // prevents entry of a program name that already exists in memory list
+    for (int i = 0; i < size; i++) {
+        if (progName ==  temp -> data){
+            cout << "Error, Program " << progName << " already running." << endl;
+            return;
+        }
+        temp = temp -> next;
+    }
+
+    temp = head;
 
     //iterates through linked list
     for (int i = 0; i < size; i++){
@@ -177,10 +209,18 @@ void LinkedList::worstFit(string progName, int sizeReq) {
         }
     }
 
-    //assigns the program to it's appropriate nodes in memory
-    for (int i = 0; i < sizeReq; i++) {
-        start->data = progName;
-        start = start->next;
+    //assigns the program to it's appropriate nodes in memory if start != null
+    if (start) {
+        for (int i = 0; i < sizeReq; i++) {
+            start->data = progName;
+            start = start->next;
+        }
+    }
+
+    // displays error message is program is too large for available memory
+    if (!start){
+        cout << "Error, Not enough memory for Program " << progName << endl;
+        return;
     }
 
     cout << "Program " << progName << " added successfully: " << sizeReq << " page(s) used.";
