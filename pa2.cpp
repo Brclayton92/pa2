@@ -216,7 +216,9 @@ void LinkedList::worstFit(string progName, int sizeReq) {
     if (start) {
         for (int i = 0; i < sizeReq; i++) {
             start->data = progName;
-            start = start->next;
+            if (start->next != nullptr) {
+                start = start->next;
+            }
         }
     }
 
