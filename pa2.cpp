@@ -162,18 +162,15 @@ void LinkedList::fragmentCheck() {
  * LinkedList class methods end
  */
 
-int main() {
+int main(int argc, char *argv[]) {
+    string cmdLine = argv[1];
     LinkedList memoryList;
     int bestOrWorstSelection = 0;
     int memorySelection = 0;
     string programName = " ";
     int programSize = 0;
 
-    cout << "Use best for worst fit?" << endl;
-    cout << "1. Best fit" << endl << "2. Worst fit" << endl;
-    cin >> bestOrWorstSelection;
-
-    if (bestOrWorstSelection == 1) {
+    if (cmdLine == "best") {
         while (memorySelection != 5) {
             cout << endl << "Using best fit algorithm" << endl;
             cout << endl;
@@ -221,7 +218,7 @@ int main() {
         }
     }
 
-    else if (bestOrWorstSelection == 2) {
+    else if (cmdLine == "worst") {
         while (memorySelection != 5) {
             cout << endl << "Using worst fit algorithm" << endl;
             cout << endl;
