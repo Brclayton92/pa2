@@ -165,7 +165,6 @@ void LinkedList::fragmentCheck() {
 int main(int argc, char *argv[]) {
     string cmdLine = argv[1];
     LinkedList memoryList;
-    int bestOrWorstSelection = 0;
     int memorySelection = 0;
     string programName = " ";
     int programSize = 0;
