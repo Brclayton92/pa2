@@ -25,6 +25,7 @@ class LinkedList {
         void addNode(string _state);
         void printList();
         void bestFit(string progName, int sizeReq);
+        void worstFit (string progName, int sizeReq);
         void killProgram(string progName);
         void fragmentCheck();
 };

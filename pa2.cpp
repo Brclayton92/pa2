@@ -48,16 +48,16 @@ void LinkedList::printList(){
 
 void LinkedList::bestFit(string progName, int sizeReq) {
     if (sizeReq % 4 == 0) {
-        sizeReq = sizeReq / 4;
+        sizeReq = sizeReq / 4;          // converts size input by user from KB to number of nodes
     }
     else {
-        sizeReq = (sizeReq / 4) + 1;
+        sizeReq = (sizeReq / 4) + 1;   // converts size input by user from KB to number of nodes
     }
-    node *start = head;
-    node *temp = head;
-    node *posStart = head;
-    int smallestFit = size;
-    int length = 0;
+    node *start = head;                // value that stores the starting position of the best fitting chunk
+    node *temp = head;                // temp value used to move through linked list
+    node *posStart = head;            // value that temporarily holds the starting position of each chunk
+    int smallestFit = size;           // used to track the smallest chunk encountered as temp moves through the linked list
+    int length = 0;                   // used to track the length of the current chunk
 
     //iterates through linked list
     for (int i = 0; i < size; i++){
@@ -93,7 +93,7 @@ void LinkedList::bestFit(string progName, int sizeReq) {
         temp = temp->next;
     }
 
-    //checks to ensure the final chunk of space in the linked list isnt the best fit, if it is best fit, start is set to posStart
+    //checks to ensure the final chunk of space in the linked list isn't the best fit, if it is best fit, start is set to posStart
     if(start != posStart) {
         temp = posStart;
         int counter = 0;
@@ -101,12 +101,82 @@ void LinkedList::bestFit(string progName, int sizeReq) {
             counter++;
             temp = temp->next;
         }
+
         if(counter >= sizeReq && counter < smallestFit) {
             start = posStart;
         }
     }
 
-    //assigns the program to it's appropriate place in memory
+    //assigns the program to it's appropriate nodes in memory
+    for (int i = 0; i < sizeReq; i++) {
+        start->data = progName;
+        start = start->next;
+    }
+
+    cout << "Program " << progName << " added successfully: " << sizeReq << " page(s) used.";
+}
+
+void LinkedList::worstFit(string progName, int sizeReq) {
+    if (sizeReq % 4 == 0) {
+        sizeReq = sizeReq / 4;          // converts size input by user from KB to number of nodes
+    }
+    else {
+        sizeReq = (sizeReq / 4) + 1;   // converts size input by user from KB to number of nodes
+    }
+    node *start = head;                // value that stores the starting position of the worst fitting chunk
+    node *temp = head;                // temp value used to move through linked list
+    node *posStart = head;            // value that temporarily holds the starting position of each chunk
+    int largestFit = 0;           // used to track the largest chunk encountered as temp moves through the linked list
+    int length = 0;                   // used to track the length of the current chunk
+
+    //iterates through linked list
+    for (int i = 0; i < size; i++){
+
+        // check for free space where temp is currently pointing
+        if (temp->data == "Free"){
+            //if current node pointed to by temp is free, stores that nodes locations as a possible start, and increments length
+            if (length == 0) {
+                posStart = temp;
+                length++;
+            }
+
+                //if node pointed to by temp is free and length != 0, increments length to count number of free spaces in a row
+            else {
+                length++;
+            }
+        }
+
+        //if temp no longer points to a free node, checks if program will fit in current chunk, if it will, sets largest fit to the length of current chunk
+        if (temp->data != "Free") {
+            if ((length >= sizeReq)){
+                if (length > largestFit){
+                    largestFit = length;
+                    start = posStart;
+                }
+            }
+
+            //resets length to 0 for use in next free chunk
+            length = 0;
+        }
+
+        temp = temp->next;
+    }
+
+    //checks to ensure the final chunk of space in the linked list isn't the worst fit, if it is worst fit, start is set to posStart
+    if(start != posStart) {
+        temp = posStart;
+        int counter = 0;
+        while (temp) {
+            counter++;
+            temp = temp->next;
+        }
+
+        if(counter >= sizeReq && counter > largestFit) {
+            start = posStart;
+        }
+    }
+
+    //assigns the program to it's appropriate nodes in memory
     for (int i = 0; i < sizeReq; i++) {
         start->data = progName;
         start = start->next;
@@ -191,6 +261,7 @@ int main(int argc, char *argv[]) {
                     cout << endl;
                     cout << "Program Size (KB) - ";
                     cin >> programSize;
+                    cout << endl;
                     memoryList.bestFit(programName, programSize);
                     break;
 
@@ -239,7 +310,7 @@ int main(int argc, char *argv[]) {
                     cout << endl;
                     cout << "Program Size (KB) - ";
                     cin >> programSize;
-                    //memoryList.worstFit(programName, programSize);
+                    memoryList.worstFit(programName, programSize);
                     break;
 
                 case 2:
