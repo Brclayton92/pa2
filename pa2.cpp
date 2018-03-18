@@ -44,11 +44,19 @@ void LinkedList::printList(){
         if (i % 8 == 0){
             tempString += "\n";
         }
-        tempString += tempNode -> data + " ";
+
+        if (tempNode->data != "Free"){
+            tempString += tempNode -> data + "   ";
+        }
+
+        else{
+            tempString += tempNode -> data + " ";
+        }
+
         tempNode = tempNode -> next;
     }
 
-    cout << tempString;
+    cout <<  tempString;
 }
 
 void LinkedList::bestFit(string progName, int sizeReq) {
