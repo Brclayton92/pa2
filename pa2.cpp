@@ -1,5 +1,6 @@
 #include <iostream>
 #include "pa2.h"
+#include <limits>
 using namespace std;
 
 /*
@@ -40,6 +41,9 @@ void LinkedList::printList(){
     node *tempNode = head;
 
     for (int i = 0; i < size; i++) {
+        if (i % 8 == 0){
+            tempString += "\n";
+        }
         tempString += tempNode -> data + " ";
         tempNode = tempNode -> next;
     }
@@ -130,7 +134,6 @@ void LinkedList::bestFit(string progName, int sizeReq) {
         }
     }
 
-     //Fixme : only works if start is initialized to null, however start = null breaks the method (might be fixed now, do some tests)
     // displays error message is program is too large for available memory
     if (!start){
         cout << "Error, Not enough memory for Program " << progName << endl;
@@ -312,7 +315,18 @@ int main(int argc, char *argv[]) {
 
             cout << endl;
             cout << "choice - ";
+
             cin >> memorySelection;
+
+            // if statement ensures user input is of proper type
+            if (cin.fail()) {
+                cin.clear();
+                std::cin.ignore(std::numeric_limits<streamsize>::max(),'\n');
+
+                // setting memorySelection to -1 triggers default (input validation) case in switch statement
+                memorySelection = -1;
+            }
+
             cout << endl;
 
             switch (memorySelection) {
@@ -350,6 +364,7 @@ int main(int argc, char *argv[]) {
                     return 0;
 
                 default:
+                    cout << "Error, invalid input. Please input an integer between 1 and 5";
                     break;
             }
         }
@@ -357,7 +372,7 @@ int main(int argc, char *argv[]) {
 
     else if (cmdLine == "worst") {
         while (memorySelection != 5) {
-            cout << endl << "Using worst fit algorithm" << endl;
+            cout << endl << endl << "Using worst fit algorithm" << endl;
             cout << endl;
             cout << "1. Add program" << endl;
             cout << "2. Kill program" << endl;
@@ -368,6 +383,16 @@ int main(int argc, char *argv[]) {
             cout << endl;
             cout << "choice - ";
             cin >> memorySelection;
+
+            // if statement ensures user input is of proper type
+            if (cin.fail()) {
+                cin.clear();
+                std::cin.ignore(std::numeric_limits<streamsize>::max(),'\n');
+
+                // setting memorySelection to -1 triggers default (input validation) case in switch statement
+                memorySelection = -1;
+            }
+
             cout << endl;
 
             switch (memorySelection) {
@@ -375,8 +400,15 @@ int main(int argc, char *argv[]) {
                     cout << "Program name - ";
                     cin >> programName;
                     cout << endl;
-                    cout << "Program Size (KB) - ";
+                    cout << "Program Size (KB) - " ;
+                    cout << endl;
                     cin >> programSize;
+
+                    if (programSize < 1) {
+                        cout << "Invalid input, program size must be greater than zero." << endl;
+                        break;
+                    }
+
                     memoryList.worstFit(programName, programSize);
                     break;
 
@@ -398,6 +430,7 @@ int main(int argc, char *argv[]) {
                     return 0;
 
                 default:
+                    cout << "Error, invalid input. Please input an integer between 1 and 5";
                     break;
             }
         }
