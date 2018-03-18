@@ -118,7 +118,7 @@ void LinkedList::bestFit(string progName, int sizeReq) {
     }
 
     //checks to ensure the final chunk of space in the linked list isn't the best fit, if it is best fit, start is set to posStart
-    if(start != posStart /*|| !start*/) {
+    if(start != posStart) {
         temp = posStart;
         int counter = 0;
         while (temp) {
@@ -142,8 +142,8 @@ void LinkedList::bestFit(string progName, int sizeReq) {
         }
     }
 
-    // displays error message is program is too large for available memory
-    if (!start){
+    // displays error message if program is too large for available memory FIXME: doesn't work for fringe case where memory is totally full
+     if (!start){
         cout << "Error, Not enough memory for Program " << progName << endl;
         return;
     }
@@ -255,6 +255,11 @@ void LinkedList::killProgram(string progName) {
         temp = temp->next;
     }
 
+    if (memoryReclaimed == 0) {
+        cout << "Error, no program named " << progName << " exists in memory.";
+        return;
+    }
+
     cout << "Program " << progName << " successfully killed, " << memoryReclaimed << " page(s) reclaimed.";
 }
 
@@ -313,7 +318,7 @@ int main(int argc, char *argv[]) {
 
     if (cmdLine == "best") {
         while (memorySelection != 5) {
-            cout << endl << "Using best fit algorithm" << endl;
+            cout << endl << endl << "Using best fit algorithm" << endl;
             cout << endl;
             cout << "1. Add program" << endl;
             cout << "2. Kill program" << endl;
