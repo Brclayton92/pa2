@@ -8,11 +8,12 @@ using namespace std;
  */
 
 LinkedList::LinkedList(){
-    head = nullptr;
-    tail = nullptr;
-    size = 0;
-    initialSize = 32;
+    head = nullptr;       // variable for first node in linked list
+    tail = nullptr;       //variable for last node in linked list
+    size = 0;             // keeps track of size of linked list
+    initialSize = 32;     // variable for selecting initial size of linked list
 
+    // creates the initial nodes of the linked list, initialsize variable determines number of nodes created
     for(int i = 0; i < initialSize; i++)
         this->LinkedList::addNode("Free");
 }
@@ -21,13 +22,15 @@ LinkedList::LinkedList(){
 void LinkedList::addNode(string _state) {
     node *state = new node;      // creates a space in memeory for new Node
     state -> data = _state;      // assigns passed in string to data section of new node
-    state -> next = nullptr;     //
+    state -> next = nullptr;     //initializes the next link to null
 
+    // statement triggered when adding first node, sets head and tail to only node in list
     if (head == nullptr) {
         head = state;
         tail = state;
     }
 
+    //adds data to current tail and sets tail to next node
     else {
         tail -> next = state;
         tail = tail -> next;
@@ -36,10 +39,12 @@ void LinkedList::addNode(string _state) {
     size++;
 }
 
+// Creates a string representing the current state of data in linked list and prints it
 void LinkedList::printList(){
     string tempString;
     node *tempNode = head;
 
+    //iterates through the linked list adding data stored at each link to tempString variable
     for (int i = 0; i < size; i++) {
         if (i % 8 == 0){
             tempString += "\n";
@@ -59,6 +64,7 @@ void LinkedList::printList(){
     cout <<  tempString;
 }
 
+//method used to add new programs when Best Fit is selected via command line arguement
 void LinkedList::bestFit(string progName, int sizeReq) {
     if (sizeReq % 4 == 0) {
         sizeReq = sizeReq / 4;          // converts size input by user from KB to number of nodes
@@ -160,7 +166,7 @@ void LinkedList::bestFit(string progName, int sizeReq) {
         }
     }
 
-    // displays error message if program is too large for available memory FIXME: doesn't work for fringe case where memory is totally full
+    // displays error message if program is too large for available memory
      if (!start){
         cout << "Error, Not enough memory for Program " << progName << endl;
         return;
@@ -260,10 +266,12 @@ void LinkedList::worstFit(string progName, int sizeReq) {
     cout << "Program " << progName << " added successfully: " << sizeReq << " page(s) used.";
 }
 
+// method used to remove programs from memory as user's request
 void LinkedList::killProgram(string progName) {
-    node *temp = head;
-    int memoryReclaimed = 0;
+    node *temp = head;          //temporary variable used to move through linked list
+    int memoryReclaimed = 0;    // variable tracks how much memory is being reclaimed
 
+    // moves through linked list setting node data that match passed in string to "Free"
     for (int i = 0; i < size; i++) {
         if (temp->data == progName){
             temp->data = "Free";
@@ -273,6 +281,7 @@ void LinkedList::killProgram(string progName) {
         temp = temp->next;
     }
 
+    // Error message triggered with user tries to remove program that doesn't exist in memory
     if (memoryReclaimed == 0) {
         cout << "Error, no program named " << progName << " exists in memory.";
         return;
@@ -283,9 +292,9 @@ void LinkedList::killProgram(string progName) {
 
 // Method counts number of fragments
 void LinkedList::fragmentCheck() {
-    node *temp = head;
-    int numFragments = 0;
-    bool newFragment = false;
+    node *temp = head;         //temp variable used to move through linked list
+    int numFragments = 0;      // Tracks number of fragments found
+    bool newFragment = false;  // variable used to keep track of when a previous fragment has eneded
 
     // Checks the first node for data and increments numFragments if it contains data
     if (temp->data != "Free"){
@@ -300,7 +309,7 @@ void LinkedList::fragmentCheck() {
             newFragment = true;
         }
 
-        // increments numFragments if
+        // increments numFragments if program is encountered when newFragment is set to true
         if (temp->data != "Free"){
             if (newFragment){
                 numFragments++;
@@ -319,21 +328,24 @@ void LinkedList::fragmentCheck() {
  */
 
 int main(int argc, char *argv[]) {
-    string cmdLine;
+    string cmdLine; // variable that stores command line arguement "best" or "worst"
 
+    // input validation statement to prevent crash if commandline arguements are left blank
     if (argv[1] == nullptr) {
         cmdLine = "";
     }
 
+    // sets cmdLine to command line arguement entered by user
     else {
         cmdLine = argv[1];
     }
 
-    LinkedList memoryList;
-    int memorySelection = 0;
-    string programName = " ";
-    int programSize = 0;
+    LinkedList memoryList;      // Linked list used to store programs
+    int memorySelection = 0;   // variable used as arguement in switch statement, stores users menu choice
+    string programName = " ";  //variable used to stores program names entered by user
+    int programSize = 0;       //variable used to store program size entered by user
 
+    // if statement that selects best fit algorithm if command line arguement is "best"
     if (cmdLine == "best") {
         while (memorySelection != 5) {
             cout << endl << endl << "Using best fit algorithm" << endl;
@@ -361,6 +373,7 @@ int main(int argc, char *argv[]) {
             cout << endl;
 
             switch (memorySelection) {
+                // adds program using best case algorithm
                 case 1:
                     cout << "Program name - ";
                     cin >> programName;
@@ -368,39 +381,45 @@ int main(int argc, char *argv[]) {
                     cout << "Program Size (KB) - ";
                     cin >> programSize;
 
+                    //input validation for negative entries by user
                     if (programSize < 1) {
                         cout << "Invalid input, program size must be greater than zero." << endl;
                         break;
                     }
 
                     cout << endl;
-                    memoryList.bestFit(programName, programSize);
+                    memoryList.bestFit(programName, programSize);  // calls best fit algorithm method
                     break;
 
+                 // kills program entered by user
                 case 2:
                     cout << "Program name - " << endl;
                     cin >> programName;
                     memoryList.killProgram(programName);
                     break;
 
+                 // calls method that counts number of fragments
                 case 3:
                     memoryList.fragmentCheck();
                     break;
 
+                // Call method that prints current memory state
                 case 4:
                     memoryList.printList();
                     break;
 
+                // terminates program
                 case 5:
                     return 0;
 
+                // default case used to print input validation error message to the screen
                 default:
                     cout << "Error, invalid input. Please input an integer between 1 and 5";
                     break;
             }
         }
     }
-
+        // if statement that selects worst fit algorithm if command line arguement is "worst"
     else if (cmdLine == "worst") {
         while (memorySelection != 5) {
             cout << endl << endl << "Using worst fit algorithm" << endl;
@@ -427,6 +446,7 @@ int main(int argc, char *argv[]) {
             cout << endl;
 
             switch (memorySelection) {
+                // adds program using worst case algorithm
                 case 1:
                     cout << "Program name - ";
                     cin >> programName;
@@ -435,12 +455,13 @@ int main(int argc, char *argv[]) {
                     cout << endl;
                     cin >> programSize;
 
+                    //input validation for negative entries by user
                     if (programSize < 1) {
                         cout << "Invalid input, program size must be greater than zero." << endl;
                         break;
                     }
 
-                    memoryList.worstFit(programName, programSize);
+                    memoryList.worstFit(programName, programSize);  // calls method that uses worst fit algorithm
                     break;
 
                 case 2:
