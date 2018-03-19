@@ -464,23 +464,28 @@ int main(int argc, char *argv[]) {
                     memoryList.worstFit(programName, programSize);  // calls method that uses worst fit algorithm
                     break;
 
+                    // kills program entered by user
                 case 2:
                     cout << "Program name - " << endl;
                     cin >> programName;
                     memoryList.killProgram(programName);
                     break;
 
+                    // calls method that counts number of fragments
                 case 3:
                     memoryList.fragmentCheck();
                     break;
 
+                    // Call method that prints current memory state
                 case 4:
                     memoryList.printList();
                     break;
 
+                    // terminates program
                 case 5:
                     return 0;
 
+                    // default case used to print input validation error message to the screen
                 default:
                     cout << "Error, invalid input. Please input an integer between 1 and 5";
                     break;
@@ -488,6 +493,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
+        //else case triggers when command line arguement is either empty or does not contain "best" or "worst"
     else {
         cout << "Error, invalid or missing command line argument. Please enter 'best' or 'worst' in command line.";
     }
