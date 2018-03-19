@@ -71,6 +71,23 @@ void LinkedList::bestFit(string progName, int sizeReq) {
     node *posStart = head;            // value that temporarily holds the starting position of each chunk
     int smallestFit = size;           // used to track the smallest chunk encountered as temp moves through the linked list
     int length = 0;                   // used to track the length of the current chunk
+    int avilableMem = 0;
+
+    //checks to see if any memory is available before entering method body
+    for (int i = 0; i < size; i++) {
+        if (temp->data == "Free") {
+            avilableMem++;
+        }
+
+        temp = temp->next;
+    }
+
+    temp = head;
+
+    if (avilableMem == 0){
+        cout << "Error, Not enough memory for Program " << progName << endl;
+        return;
+    }
 
     // prevents entry of a program name that already exists in memory list
     for (int i = 0; i < size; i++) {
@@ -121,7 +138,8 @@ void LinkedList::bestFit(string progName, int sizeReq) {
     if(start != posStart) {
         temp = posStart;
         int counter = 0;
-        while (temp) {
+
+        while (temp && (temp->data == "Free")) {
             counter++;
             temp = temp->next;
         }
@@ -213,7 +231,7 @@ void LinkedList::worstFit(string progName, int sizeReq) {
     if(start != posStart) {
         temp = posStart;
         int counter = 0;
-        while (temp) {
+        while (temp && temp->data == "Free") {
             counter++;
             temp = temp->next;
         }
